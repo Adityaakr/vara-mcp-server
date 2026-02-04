@@ -1,5 +1,5 @@
 import { existsSync, readdirSync } from 'node:fs';
-import { join, basename } from 'node:path';
+import { join } from 'node:path';
 import { safeSpawn, resolveWithinRoot, logger, commandExists } from '@vara-mcp/runtime';
 import type { CompileInput } from './schemas.js';
 

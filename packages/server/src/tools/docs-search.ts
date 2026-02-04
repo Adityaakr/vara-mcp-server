@@ -427,7 +427,6 @@ export function searchDocs(input: DocsSearchInput): DocsSearchResult {
  */
 function extractSnippet(content: string, queryWords: string[]): string {
   const lines = content.split('\n').filter((l) => l.trim());
-  const contentLower = content.toLowerCase();
 
   // Find the most relevant line
   let bestLine = 0;

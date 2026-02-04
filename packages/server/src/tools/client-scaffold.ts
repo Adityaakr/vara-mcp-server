@@ -21,7 +21,7 @@ export async function scaffoldClient(
   input: ClientScaffoldInput,
   workspaceRoot: string
 ): Promise<ClientScaffoldResult> {
-  const { workspacePath, projectPath, outDir, language } = input;
+  const { workspacePath, projectPath, outDir, language: _language } = input;
 
   // Resolve paths
   const effectiveWorkspace = workspacePath
