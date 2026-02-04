@@ -1,6 +1,6 @@
 {
   "name": "vara-mcp-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server for Vara Network smart program development with Sails",
   "type": "module",
   "main": "./dist/index.js",
@@ -14,7 +14,9 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
