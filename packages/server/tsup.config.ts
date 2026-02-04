@@ -10,4 +10,11 @@ export default defineConfig({
   banner: {
     js: '#!/usr/bin/env node',
   },
+  // Bundle workspace dependencies into the output
+  // Only externalize actual npm packages
+  noExternal: [
+    '@vara-mcp/runtime',
+    '@vara-mcp/templates', 
+    '@vara-mcp/chain',
+  ],
 });

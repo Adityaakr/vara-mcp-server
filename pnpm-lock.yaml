@@ -56,6 +56,13 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.0.4
         version: 1.25.3(hono@4.11.7)(zod@3.25.76)
+      zod:
+        specifier: ^3.22.0
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.0
+        version: 20.19.30
       '@vara-mcp/chain':
         specifier: workspace:*
         version: link:../chain
@@ -65,13 +72,6 @@ importers:
       '@vara-mcp/templates':
         specifier: workspace:*
         version: link:../templates
-      zod:
-        specifier: ^3.22.0
-        version: 3.25.76
-    devDependencies:
-      '@types/node':
-        specifier: ^20.11.0
-        version: 20.19.30
       tsup:
         specifier: ^8.0.0
         version: 8.5.1(postcss@8.5.6)(typescript@5.9.3)
