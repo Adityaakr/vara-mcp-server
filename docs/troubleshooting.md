@@ -69,7 +69,7 @@ source $HOME/.cargo/env
 **Solution:** Install the WASM target:
 
 ```bash
-rustup target add wasm32-unknown-unknown
+rustup target add wasm32v1-none
 ```
 
 ### Sails CLI not found

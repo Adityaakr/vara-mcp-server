@@ -147,8 +147,8 @@ function registerToolHandlers(server: Server): void {
               },
               target: {
                 type: 'string',
-                default: 'wasm32-unknown-unknown',
-                description: 'Build target',
+                default: 'wasm32v1-none',
+                description: 'Build target (wasm32v1-none for modern Vara/Sails)',
               },
               verbose: {
                 type: 'boolean',

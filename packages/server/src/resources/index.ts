@@ -50,7 +50,7 @@ deploy smart programs.
 Before you begin, ensure you have:
 
 1. **Rust toolchain** installed via [rustup](https://rustup.rs/)
-2. **WASM target** added: \`rustup target add wasm32-unknown-unknown\`
+2. **WASM target** added: \`rustup target add wasm32v1-none\`
 3. **Sails CLI** (optional): \`cargo install sails-cli\`
 
 ## Creating a New Program
@@ -178,12 +178,13 @@ cargo test
 
 ## Build Targets
 
-### Default Target: wasm32-unknown-unknown
+### Modern Target: wasm32v1-none (Recommended)
 
-This is the standard target for Vara programs.
+This is the current standard target for Vara/Sails programs. The old wasm32-unknown-unknown 
+target is now considered legacy and should only be used for older projects.
 
 \`\`\`bash
-rustup target add wasm32-unknown-unknown
+rustup target add wasm32v1-none
 \`\`\`
 
 ### Build Commands
@@ -194,18 +195,23 @@ cargo build
 
 # Release build (optimized, smaller output)
 cargo build --release
-
-# Specify target explicitly
-cargo build --release --target wasm32-unknown-unknown
 \`\`\`
 
 ### Output Locations
 
-| Build Type | WASM Location |
-|------------|---------------|
-| Debug | \`target/wasm32-unknown-unknown/debug/*.wasm\` |
-| Release | \`target/wasm32-unknown-unknown/release/*.wasm\` |
-| Optimized | \`target/wasm32-unknown-unknown/release/*.opt.wasm\` |
+Sails builds output to the \`target/wasm32-gear/\` directory:
+
+\`\`\`
+target/wasm32-gear/release/
+├── my_program.wasm       # Built WASM file
+├── my_program.opt.wasm   # Optimized WASM file (use this for deployment)
+└── my_program.idl        # Application interface IDL file
+\`\`\`
+
+| Build Type | Location |
+|------------|----------|
+| Debug | \`target/wasm32-gear/debug/\` |
+| Release | \`target/wasm32-gear/release/\` |
 
 ## Common Issues & Solutions
 
@@ -218,7 +224,7 @@ error[E0463]: can't find crate for 'std'
 
 **Solution:**
 \`\`\`bash
-rustup target add wasm32-unknown-unknown
+rustup target add wasm32v1-none
 \`\`\`
 
 ### Missing sails-rs Crate
@@ -276,9 +282,9 @@ wasm-ld: error: initial memory too small
 
 ## IDL Generation
 
-The IDL file is generated automatically during build:
+The IDL file is generated automatically during build in the same output directory:
 \`\`\`
-target/wasm32-unknown-unknown/release/*.idl
+target/wasm32-gear/release/my_program.idl
 \`\`\`
 
 This file describes your program's interface and is needed for client generation.

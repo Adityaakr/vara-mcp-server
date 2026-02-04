@@ -48,8 +48,8 @@ export const compileSchema = z.object({
     .describe('Build in release mode (optimized)'),
   target: z
     .string()
-    .default('wasm32-unknown-unknown')
-    .describe('Build target (default: wasm32-unknown-unknown)'),
+    .default('wasm32v1-none')
+    .describe('Build target (default: wasm32v1-none for modern Vara/Sails)'),
   verbose: z.boolean().default(false).describe('Enable verbose output'),
 });
 

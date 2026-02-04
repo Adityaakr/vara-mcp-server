@@ -110,37 +110,41 @@ function findBuildArtifacts(projectPath: string): { wasmPath: string | null; idl
 
   // Look in release first, then debug
   const profiles = ['release', 'debug'];
-  const target = 'wasm32-unknown-unknown';
+  
+  // Check new wasm32-gear directory first, then legacy wasm32-unknown-unknown
+  const targets = ['wasm32-gear', 'wasm32-unknown-unknown'];
 
-  for (const profile of profiles) {
-    const targetDir = join(projectPath, 'target', target, profile);
-    
-    if (!existsSync(targetDir)) {
-      continue;
-    }
-
-    try {
-      const files = readdirSync(targetDir);
+  for (const target of targets) {
+    for (const profile of profiles) {
+      const targetDir = join(projectPath, 'target', target, profile);
       
-      for (const file of files) {
-        // Prefer .opt.wasm over regular .wasm
-        if (file.endsWith('.opt.wasm') && !wasmPath) {
-          wasmPath = join(targetDir, file);
-        } else if (file.endsWith('.wasm') && !file.endsWith('.opt.wasm') && !wasmPath) {
-          wasmPath = join(targetDir, file);
-        }
-        
-        if (file.endsWith('.idl') && !idlPath) {
-          idlPath = join(targetDir, file);
-        }
+      if (!existsSync(targetDir)) {
+        continue;
       }
 
-      // If we found both, we're done
-      if (wasmPath && idlPath) {
-        break;
+      try {
+        const files = readdirSync(targetDir);
+        
+        for (const file of files) {
+          // Prefer .opt.wasm over regular .wasm
+          if (file.endsWith('.opt.wasm') && !wasmPath) {
+            wasmPath = join(targetDir, file);
+          } else if (file.endsWith('.wasm') && !file.endsWith('.opt.wasm') && !wasmPath) {
+            wasmPath = join(targetDir, file);
+          }
+          
+          if (file.endsWith('.idl') && !idlPath) {
+            idlPath = join(targetDir, file);
+          }
+        }
+
+        // If we found both, we're done
+        if (wasmPath && idlPath) {
+          return { wasmPath, idlPath };
+        }
+      } catch {
+        // Directory might not be accessible
       }
-    } catch {
-      // Directory might not be accessible
     }
   }
 

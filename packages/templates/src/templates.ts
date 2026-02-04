@@ -149,11 +149,12 @@ function generateNextSteps(templateName: TemplateName, projectName: string): str
     case 'counter':
       steps.push(
         `cd ${projectName}`,
-        'Ensure Rust wasm32 target is installed: rustup target add wasm32-unknown-unknown',
+        'Ensure Rust wasm32v1-none target is installed: rustup target add wasm32v1-none',
         'Build the program: cargo build --release',
         'Run tests: cargo test',
-        'Find the WASM file at: target/wasm32-unknown-unknown/release/*.opt.wasm',
-        'Find the IDL file at: target/wasm32-unknown-unknown/release/*.idl'
+        'Find the build output at: target/wasm32-gear/release/',
+        '  - WASM: *.wasm and *.opt.wasm',
+        '  - IDL: *.idl'
       );
       break;
     default:

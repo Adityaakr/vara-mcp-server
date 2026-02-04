@@ -15,9 +15,9 @@ This program demonstrates basic Sails patterns:
 
 ### Prerequisites
 
-1. **Rust toolchain** with the `wasm32-unknown-unknown` target:
+1. **Rust toolchain** with the `wasm32v1-none` target:
    ```bash
-   rustup target add wasm32-unknown-unknown
+   rustup target add wasm32v1-none
    ```
 
 2. **Sails CLI** (optional but recommended):
@@ -37,12 +37,13 @@ Build in release mode (optimized WASM):
 cargo build --release
 ```
 
-The WASM file will be output to:
-- Debug: `target/wasm32-unknown-unknown/debug/{{PROJECT_NAME}}.wasm`
-- Release: `target/wasm32-unknown-unknown/release/{{PROJECT_NAME}}.opt.wasm`
-
-The IDL file will be generated at:
-- `target/wasm32-unknown-unknown/{debug|release}/{{PROJECT_NAME}}.idl`
+The build output will be in `target/wasm32-gear/release/`:
+```
+target/wasm32-gear/release/
+├── {{PROJECT_NAME}}.wasm       # Built WASM file
+├── {{PROJECT_NAME}}.opt.wasm   # Optimized WASM file
+└── {{PROJECT_NAME}}.idl        # Application interface IDL file
+```
 
 ## Testing
 

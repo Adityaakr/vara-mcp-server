@@ -99,20 +99,29 @@ export async function compileProgram(
   }
 
   // Find output files
+  // Sails/Vara builds output to target/wasm32-gear/{profile}/ regardless of target
   const profile = release ? 'release' : 'debug';
-  const targetDir = join(effectiveProjectPath, 'target', target, profile);
+  
+  // Check both the new wasm32-gear directory and legacy target directory
+  const possibleTargetDirs = [
+    join(effectiveProjectPath, 'target', 'wasm32-gear', profile),  // New Sails output
+    join(effectiveProjectPath, 'target', target, profile),         // Legacy/direct target
+  ];
 
   const wasmPaths: string[] = [];
   const idlPaths: string[] = [];
 
-  if (existsSync(targetDir)) {
-    const files = readdirSync(targetDir);
-    for (const file of files) {
-      if (file.endsWith('.wasm') || file.endsWith('.opt.wasm')) {
-        wasmPaths.push(join(targetDir, file));
-      }
-      if (file.endsWith('.idl')) {
-        idlPaths.push(join(targetDir, file));
+  for (const targetDir of possibleTargetDirs) {
+    if (existsSync(targetDir)) {
+      const files = readdirSync(targetDir);
+      for (const file of files) {
+        const fullPath = join(targetDir, file);
+        if ((file.endsWith('.wasm') || file.endsWith('.opt.wasm')) && !wasmPaths.includes(fullPath)) {
+          wasmPaths.push(fullPath);
+        }
+        if (file.endsWith('.idl') && !idlPaths.includes(fullPath)) {
+          idlPaths.push(fullPath);
+        }
       }
     }
   }
