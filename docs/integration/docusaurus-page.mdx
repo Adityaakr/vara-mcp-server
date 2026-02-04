@@ -1,0 +1,137 @@
+# Vara MCP Server for Cursor IDE
+
+Build Vara Network smart programs faster with AI-assisted development directly in Cursor IDE.
+
+<div className="mcp-install-section">
+
+## Quick Install
+
+### Option 1: One-Click Install
+
+<a 
+  href="cursor://anysphere.cursor-deeplink/mcp/install?name=vara-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyJ2YXJhLW1jcC1zZXJ2ZXIiXX0="
+  className="cursor-install-button"
+>
+  <img src="/img/cursor-icon.svg" alt="Cursor" width="24" height="24" />
+  <span>Connect to Cursor</span>
+  <span className="arrow">↗</span>
+</a>
+
+<p className="install-subtitle">Install MCP Server on Cursor</p>
+
+### Option 2: Manual Installation
+
+```bash
+npm install -g vara-mcp-server
+```
+
+Then add to your Cursor configuration:
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="project" label="Project Config" default>
+
+Create `.cursor/mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "vara-mcp": {
+      "command": "npx",
+      "args": ["vara-mcp-server"]
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem value="global" label="Global Config">
+
+Add to `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "vara-mcp": {
+      "command": "vara-mcp-server"
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
+
+</div>
+
+## Features
+
+| Tool | Description |
+|------|-------------|
+| `vara_scaffold_program` | Scaffold a new Vara/Sails program from templates |
+| `vara_compile` | Compile your program to WASM |
+| `vara_test` | Run your program's test suite |
+| `vara_client_scaffold` | Generate TypeScript client code |
+| `vara_docs_search` | Search Vara documentation |
+
+## Getting Started
+
+After installing, open Cursor and use the **"Create a Vara MVP (Counter)"** prompt to:
+
+1. ✅ Scaffold a new Sails counter program
+2. ✅ Compile it to WASM
+3. ✅ Run tests
+4. ✅ Generate a TypeScript client
+
+Just tell Cursor: *"Create a new Vara counter program called my-counter"*
+
+## Requirements
+
+- **Node.js** 18+
+- **Rust** with `wasm32-unknown-unknown` target
+- **Cursor IDE**
+
+```bash
+# Install Rust WASM target if needed
+rustup target add wasm32-unknown-unknown
+```
+
+## Environment Variables (Optional)
+
+| Variable | Description |
+|----------|-------------|
+| `VARA_RPC_URL` | Custom Vara network RPC endpoint |
+| `VARA_WORKSPACE_ROOT` | Override default workspace root |
+
+## Resources
+
+- [GitHub Repository](https://github.com/Adityaakr/vara-mcp-server)
+- [npm Package](https://www.npmjs.com/package/vara-mcp-server)
+- [Troubleshooting Guide](/docs/troubleshooting)
+
+---
+
+export const CursorButton = () => (
+  <a 
+    href="cursor://anysphere.cursor-deeplink/mcp/install?name=vara-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyJ2YXJhLW1jcC1zZXJ2ZXIiXX0="
+    style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '8px',
+      padding: '12px 20px',
+      backgroundColor: '#1a1a1a',
+      color: '#fff',
+      borderRadius: '8px',
+      textDecoration: 'none',
+      fontSize: '14px',
+      fontWeight: 500,
+    }}
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+    </svg>
+    Connect to Cursor ↗
+  </a>
+);

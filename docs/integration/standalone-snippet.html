@@ -1,0 +1,84 @@
+<!--
+  Standalone HTML snippet for "Connect to Cursor" button
+  Copy this to any website/documentation page
+-->
+
+<style>
+  .vara-mcp-install {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  .vara-mcp-install a.cursor-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background-color: #1a1a1a;
+    color: #ffffff !important;
+    border-radius: 8px;
+    text-decoration: none !important;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+  
+  .vara-mcp-install a.cursor-btn:hover {
+    background-color: #333;
+  }
+  
+  .vara-mcp-install a.cursor-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .vara-mcp-install .subtitle {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .vara-mcp-install .install-code {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #f5f5f5;
+    border-radius: 6px;
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 13px;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .vara-mcp-install .install-code {
+      background: #2d2d2d;
+      color: #e0e0e0;
+    }
+  }
+</style>
+
+<div class="vara-mcp-install">
+  <!-- One-click install button -->
+  <a 
+    href="cursor://anysphere.cursor-deeplink/mcp/install?name=vara-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyJ2YXJhLW1jcC1zZXJ2ZXIiXX0="
+    class="cursor-btn"
+  >
+    <!-- Cursor-style icon -->
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 013 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/>
+    </svg>
+    <span>Connect to Cursor</span>
+    <span style="opacity: 0.7">↗</span>
+  </a>
+  <span class="subtitle">Install MCP Server on Cursor</span>
+  
+  <!-- Alternative: npm install command -->
+  <div class="install-code">
+    <code>npm install -g vara-mcp-server</code>
+  </div>
+</div>
+
+<!--
+  Alternative: Simple text link version
+  <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=vara-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyJ2YXJhLW1jcC1zZXJ2ZXIiXX0=">
+    Install Vara MCP Server in Cursor →
+  </a>
+-->

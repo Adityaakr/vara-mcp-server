@@ -1,0 +1,156 @@
+---
+title: 'Vara MCP Server'
+description: 'AI-assisted Vara smart program development in Cursor IDE'
+icon: 'wand-magic-sparkles'
+---
+
+# Vara MCP Server for Cursor IDE
+
+Build Vara Network smart programs faster with AI-assisted development directly in Cursor IDE.
+
+<Card
+  title="Connect to Cursor"
+  icon="arrow-up-right-from-square"
+  href="cursor://anysphere.cursor-deeplink/mcp/install?name=vara-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyJ2YXJhLW1jcC1zZXJ2ZXIiXX0="
+>
+  Install MCP Server on Cursor with one click
+</Card>
+
+## Manual Installation
+
+<Steps>
+  <Step title="Install the package">
+    ```bash
+    npm install -g vara-mcp-server
+    ```
+  </Step>
+  <Step title="Configure Cursor">
+    Create `.cursor/mcp.json` in your project:
+    ```json
+    {
+      "mcpServers": {
+        "vara-mcp": {
+          "command": "npx",
+          "args": ["vara-mcp-server"]
+        }
+      }
+    }
+    ```
+  </Step>
+  <Step title="Restart Cursor">
+    Restart Cursor IDE to load the MCP server
+  </Step>
+</Steps>
+
+## Available Tools
+
+<CardGroup cols={2}>
+  <Card title="vara_scaffold_program" icon="hammer">
+    Scaffold a new Vara/Sails program from templates (counter, NFT, etc.)
+  </Card>
+  <Card title="vara_compile" icon="gear">
+    Compile your Rust program to WASM for deployment
+  </Card>
+  <Card title="vara_test" icon="flask-vial">
+    Run your program's test suite with detailed output
+  </Card>
+  <Card title="vara_client_scaffold" icon="code">
+    Generate TypeScript client code for your program
+  </Card>
+</CardGroup>
+
+## Quick Start
+
+After installing, open Cursor and use the built-in prompts:
+
+<AccordionGroup>
+  <Accordion title="Create a Vara MVP (Counter)">
+    Tell Cursor: *"Create a new Vara counter program"*
+    
+    This will automatically:
+    1. Scaffold a new Sails counter program
+    2. Compile it to WASM
+    3. Run tests
+    4. Generate a TypeScript client
+  </Accordion>
+  <Accordion title="Add Feature to Program">
+    Tell Cursor: *"Add a multiply feature to my counter"*
+    
+    The AI will analyze your existing code and suggest patches.
+  </Accordion>
+</AccordionGroup>
+
+## Requirements
+
+<Info>
+  Make sure you have the following installed before using the MCP server:
+</Info>
+
+| Requirement | Version | Installation |
+|-------------|---------|--------------|
+| Node.js | 18+ | [nodejs.org](https://nodejs.org) |
+| Rust | Latest stable | [rustup.rs](https://rustup.rs) |
+| WASM Target | - | `rustup target add wasm32-unknown-unknown` |
+
+## Configuration Options
+
+<ParamField path="VARA_RPC_URL" type="string">
+  Custom Vara network RPC endpoint for deployment operations
+</ParamField>
+
+<ParamField path="VARA_WORKSPACE_ROOT" type="string">
+  Override the default workspace root directory
+</ParamField>
+
+### Example with Environment Variables
+
+```json
+{
+  "mcpServers": {
+    "vara-mcp": {
+      "command": "npx",
+      "args": ["vara-mcp-server"],
+      "env": {
+        "VARA_RPC_URL": "wss://testnet.vara.network"
+      }
+    }
+  }
+}
+```
+
+## Troubleshooting
+
+<Accordion title="Rust/Cargo not found">
+  Install Rust via rustup:
+  ```bash
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+  source $HOME/.cargo/env
+  ```
+</Accordion>
+
+<Accordion title="WASM target missing">
+  Add the WASM compilation target:
+  ```bash
+  rustup target add wasm32-unknown-unknown
+  ```
+</Accordion>
+
+<Accordion title="MCP server not loading">
+  1. Verify the config file location: `.cursor/mcp.json`
+  2. Check JSON syntax is valid
+  3. Restart Cursor IDE completely
+</Accordion>
+
+## Links
+
+<CardGroup cols={3}>
+  <Card title="GitHub" icon="github" href="https://github.com/Adityaakr/vara-mcp-server">
+    Source code
+  </Card>
+  <Card title="npm" icon="npm" href="https://www.npmjs.com/package/vara-mcp-server">
+    Package registry
+  </Card>
+  <Card title="Vara Docs" icon="book" href="https://vara.network/docs">
+    Vara documentation
+  </Card>
+</CardGroup>

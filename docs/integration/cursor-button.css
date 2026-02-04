@@ -1,0 +1,136 @@
+/* Cursor MCP Install Button Styles */
+
+.cursor-install-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cursor-install-button:hover {
+  background-color: #2a2a2a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.cursor-install-button:active {
+  transform: translateY(0);
+}
+
+.cursor-install-button img,
+.cursor-install-button svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.cursor-install-button .arrow {
+  margin-left: 4px;
+  opacity: 0.7;
+  font-size: 14px;
+}
+
+.install-subtitle {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* Light mode variant */
+[data-theme='light'] .cursor-install-button {
+  background-color: #000000;
+  border-color: #000000;
+}
+
+[data-theme='light'] .cursor-install-button:hover {
+  background-color: #1a1a1a;
+}
+
+/* Card style variant (for Mintlify-like designs) */
+.cursor-install-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-radius: 12px;
+  text-decoration: none;
+  border: 1px solid #333;
+  transition: all 0.2s ease;
+}
+
+.cursor-install-card:hover {
+  border-color: #555;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.cursor-install-card .icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: #333;
+  border-radius: 10px;
+}
+
+.cursor-install-card .content {
+  flex: 1;
+}
+
+.cursor-install-card .title {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.cursor-install-card .description {
+  color: #999;
+  font-size: 14px;
+  margin: 0;
+}
+
+.cursor-install-card .arrow {
+  color: #666;
+  font-size: 20px;
+}
+
+/* MCP install section container */
+.mcp-install-section {
+  margin: 32px 0;
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+[data-theme='dark'] .mcp-install-section {
+  background: #1e1e1e;
+  border-color: #333;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .cursor-install-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .cursor-install-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
