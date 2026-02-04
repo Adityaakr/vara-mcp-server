@@ -48,7 +48,7 @@ const DANGEROUS_PATTERNS = [
   /[;&|`$]/,      // Shell metacharacters
   /\$\(/,         // Command substitution
   /`/,            // Backtick command substitution
-  /\.\.[\/\\]/,   // Parent directory traversal (checked more thoroughly in paths.ts)
+  /\.\.[/\\]/,    // Parent directory traversal (checked more thoroughly in paths.ts)
   />\s*\//,       // Redirect to root
   /<\s*\//,       // Read from root
 ];
