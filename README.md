@@ -1,221 +1,281 @@
 # Vara MCP Server
 
-[![CI](https://github.com/vara-network/vara-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/vara-network/vara-mcp/actions/workflows/ci.yml)
-[![npm version](https://badge.fury.io/js/@vara-network%2Fmcp-server.svg)](https://www.npmjs.com/package/@vara-network/mcp-server)
+[![npm version](https://img.shields.io/npm/v/vara-mcp-server.svg)](https://www.npmjs.com/package/vara-mcp-server)
+[![CI](https://github.com/Adityaakr/vara-mcp-server/actions/workflows/ci.yml/badge.svg)](https://github.com/Adityaakr/vara-mcp-server/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org/)
 
-A production-ready [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server for Vara Network smart program development with Sails.
+**Build Vara Network smart programs 40-100x faster** with AI-assisted development in Cursor IDE.
 
-> **40-100x faster** Vara development - scaffold, compile, test, and generate clients with simple chat commands.
+A production-ready [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that lets you scaffold, compile, test, and generate TypeScript clients for [Vara Network](https://vara.network/) smart programs using natural language.
 
-## Features
+---
 
-- **Scaffold**: Create new Vara programs from templates (Sails CLI or embedded)
-- **Compile**: Build programs to WASM with automatic IDL generation
-- **Test**: Run program tests with detailed results
-- **Client Generate**: Create TypeScript clients for your programs
-- **Documentation**: Search bundled Vara/Sails documentation
+## 🚀 Before vs After
 
-## Quick Start
+### ❌ Before: Traditional Vara Development
 
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/your-org/vara-mcp.git
-cd vara-mcp
-
-# Install dependencies
-pnpm install
-
-# Build all packages
-pnpm build
+```
+📋 Manual Steps Required                           ⏱️ Time
+─────────────────────────────────────────────────────────
+1. Research Sails docs & examples                  30-60 min
+2. Manually create Cargo.toml, lib.rs, build.rs   15-30 min  
+3. Write service, program, events from scratch     30-60 min
+4. Debug build errors (targets, crate-types)       15-45 min
+5. Run cargo build, fix errors, repeat             5-10 min
+6. Research gear-js API for client code            45-90 min
+7. Write TypeScript client from scratch            30-45 min
+8. Set up tests with gtest                         20-30 min
+─────────────────────────────────────────────────────────
+Total: 3-6 hours for a basic counter program 😫
 ```
 
-### Cursor Configuration
+### ✅ After: With vara-mcp-server
 
-Create `.cursor/mcp.json` in your project (or `~/.cursor/mcp.json` for global):
+```
+💬 Just Ask in Cursor                              ⏱️ Time
+─────────────────────────────────────────────────────────
+"Create a Vara MVP called my-counter"              ~2 min
+─────────────────────────────────────────────────────────
+✓ Complete Rust program with Sails
+✓ Service with state, commands, queries, events
+✓ Proper Cargo.toml with all dependencies
+✓ Build script for WASM compilation
+✓ TypeScript client with full API
+✓ Ready to deploy!
+
+Total: ~2 minutes 🚀
+```
+
+### 📊 Speed Comparison
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                Time to First Working Program                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Traditional    ████████████████████████████████████  3-6 hours │
+│                                                                 │
+│  With MCP       ██  ~2 minutes                                  │
+│                                                                 │
+│                 └─────────────────────────────────────────────  │
+│                           40-100x faster                        │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📦 Installation
+
+```bash
+npm install -g vara-mcp-server
+```
+
+## ⚙️ Cursor IDE Setup
+
+Add to your `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global):
 
 ```json
 {
   "mcpServers": {
     "vara-mcp": {
-      "command": "node",
-      "args": ["/absolute/path/to/vara-mcp/packages/server/dist/index.js"],
-      "env": {
-        "VARA_WORKSPACE_ROOT": "${workspaceFolder}"
-      }
+      "command": "npx",
+      "args": ["vara-mcp-server"]
     }
   }
 }
 ```
 
-### Demo: Create a Vara MVP
+**Restart Cursor** after adding the configuration.
 
-1. Open Cursor in a new directory
-2. Use the chat to invoke the "Create a Vara MVP (Counter)" prompt
-3. The server will scaffold, compile, test, and generate a client
+---
 
-Or use tools directly:
+## 🛠️ Available Tools
 
-```
-Use vara_scaffold_program with name "my-counter" and template "counter"
-```
+| Tool | Description | Example |
+|------|-------------|---------|
+| `vara_scaffold_program` | Create new Vara program from template | *"Create a counter program called my-dapp"* |
+| `vara_compile` | Compile to optimized WASM | *"Compile my-dapp in release mode"* |
+| `vara_test` | Run program tests | *"Run tests for my-dapp"* |
+| `vara_client_scaffold` | Generate TypeScript client | *"Generate a client for my-dapp"* |
+| `vara_docs_search` | Search Vara/Sails documentation | *"How do I emit events in Sails?"* |
 
-```
-Use vara_compile with projectPath "my-counter" and release true
-```
+---
 
-```
-Use vara_test with projectPath "my-counter"
-```
+## 💬 Available Prompts
 
+### Create a Vara MVP
+Runs the complete workflow automatically:
 ```
-Use vara_client_scaffold with projectPath "my-counter" and outDir "my-counter-client"
-```
-
-## Project Structure
-
-```
-vara-mcp/
-├── packages/
-│   ├── server/          # MCP server (main entry point)
-│   ├── runtime/         # Safe execution utilities
-│   ├── templates/       # Embedded program templates
-│   └── chain/           # Gear-JS helpers
-├── docs/
-│   ├── cursor-setup.md  # Detailed Cursor configuration
-│   ├── security.md      # Security model documentation
-│   └── troubleshooting.md
-└── README.md
+Scaffold → Compile → Test → Generate Client
 ```
 
-## Available Tools
+### Add Feature to Program
+Get guidance on adding new features to existing programs with code suggestions.
 
-| Tool | Description |
-|------|-------------|
-| `vara_scaffold_program` | Create a new Vara program from template |
-| `vara_compile` | Compile a program to WASM |
-| `vara_test` | Run program tests |
-| `vara_client_scaffold` | Generate TypeScript client |
-| `vara_docs_search` | Search documentation |
+---
 
-## Available Prompts
+## 📚 Available Resources
 
-| Prompt | Description |
-|--------|-------------|
-| `create-vara-mvp` | Full workflow: scaffold → compile → test → client |
-| `add-feature-to-program` | Guidance on adding features |
+Access bundled documentation directly in Cursor:
 
-## Available Resources
+- **Vara Sails Quickstart** - Getting started guide
+- **Build Targets & Gotchas** - Common issues and solutions  
+- **Gear-JS Interaction Basics** - JavaScript SDK guide
 
-| Resource | Description |
-|----------|-------------|
-| `vara://docs/sails-quickstart` | Getting started with Sails |
-| `vara://docs/build-targets` | Build configuration guide |
-| `vara://docs/gear-js-basics` | JavaScript SDK basics |
+---
 
-## Development
+## 🎯 Example Usage
+
+### 1. Create a New Program
+
+In Cursor chat:
+```
+Create a Vara smart program called "my-token" using the counter template
+```
+
+### 2. Compile to WASM
+
+```
+Compile my-token in release mode
+```
+
+Output:
+```
+✓ my_token.opt.wasm (73 KB)
+✓ my_token.idl
+```
+
+### 3. Generate TypeScript Client
+
+```
+Generate a TypeScript client for my-token
+```
+
+### 4. Use the Client
+
+```typescript
+import { MyTokenClient } from './my-token-client';
+
+const client = new MyTokenClient();
+await client.connect('wss://testnet.vara.network');
+await client.initKeyring(process.env.VARA_SEED);
+
+// Upload program
+const programId = await client.uploadProgram({
+  wasmPath: './target/wasm32-unknown-unknown/release/my_token.opt.wasm'
+});
+
+// Interact
+await client.sendMessage({ payload: { Counter: { Increment: null } } });
+const state = await client.readState();
+```
+
+---
+
+## 🔒 Security
+
+This server implements strict security measures:
+
+| Feature | Implementation |
+|---------|----------------|
+| **Command Allowlist** | Only `cargo`, `node`, `npm/pnpm/yarn`, `rustup` allowed |
+| **Path Sandboxing** | All file operations restricted to workspace root |
+| **No Shell Execution** | Commands spawned directly with `shell: false` |
+| **No Secret Persistence** | Secrets read from env vars only, never logged |
+
+See [security.md](docs/security.md) for details.
+
+---
+
+## 🧪 Development
 
 ### Prerequisites
 
 - Node.js 18+
 - pnpm 9+
-- Rust toolchain (for testing actual builds)
+- Rust toolchain (for testing builds)
 
-### Commands
+### Setup
 
 ```bash
-# Install dependencies
+git clone https://github.com/Adityaakr/vara-mcp-server.git
+cd vara-mcp-server
 pnpm install
-
-# Build all packages
 pnpm build
-
-# Run tests
 pnpm test
-
-# Watch mode (development)
-pnpm dev
-
-# Type checking
-pnpm typecheck
-
-# Linting
-pnpm lint
-pnpm lint:fix
-
-# Format code
-pnpm format
 ```
 
-### Running the Server Directly
+### Run Locally
 
 ```bash
 node packages/server/dist/index.js
 ```
 
-### Debug Mode
+---
 
-```bash
-VARA_DEBUG=true node packages/server/dist/index.js
+## 📁 Project Structure
+
+```
+vara-mcp-server/
+├── packages/
+│   ├── server/      # MCP server entry point
+│   ├── runtime/     # Safe execution utilities
+│   ├── templates/   # Sails program templates
+│   └── chain/       # TypeScript client generator
+├── docs/
+│   ├── cursor-setup.md
+│   ├── security.md
+│   └── troubleshooting.md
+└── README.md
 ```
 
-## Security
+---
 
-The server implements strict security measures:
+## 🐛 Troubleshooting
 
-- **Command Allowlist**: Only specific commands can be executed
-- **Path Sandboxing**: File operations restricted to workspace
-- **No Shell Execution**: Commands spawned directly, not through shell
-- **No Secret Persistence**: Sensitive data never written to disk
-
-See [docs/security.md](docs/security.md) for details.
-
-## Troubleshooting
-
-Common issues and solutions are documented in [docs/troubleshooting.md](docs/troubleshooting.md).
-
-### Quick Fixes
-
-**cargo not found:**
+### cargo not found
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-**WASM target not installed:**
+### WASM target not installed
 ```bash
 rustup target add wasm32-unknown-unknown
 ```
 
-**Server won't start:**
-1. Check the path in `.cursor/mcp.json`
-2. Ensure `pnpm build` completed successfully
-3. Test manually: `node packages/server/dist/index.js`
+### Server not connecting in Cursor
+1. Check path in `.cursor/mcp.json`
+2. Restart Cursor completely
+3. Enable debug mode: `"env": { "VARA_DEBUG": "true" }`
 
-## Environment Variables
+See [troubleshooting.md](docs/troubleshooting.md) for more solutions.
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `VARA_WORKSPACE_ROOT` | Root directory for operations | `process.cwd()` |
-| `VARA_DEBUG` | Enable debug logging | `false` |
-| `VARA_SEED` | Seed phrase for deployment | (not set) |
-| `VARA_RPC_URL` | Default RPC endpoint | `wss://testnet.vara.network` |
+---
 
-## License
+## 🤝 Contributing
 
-MIT
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-## Contributing
+---
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes with tests
-4. Submit a pull request
+## 📄 License
 
-## Resources
+MIT © [Aditya Kumar](https://github.com/Adityaakr)
 
+---
+
+## 🔗 Links
+
+- [npm Package](https://www.npmjs.com/package/vara-mcp-server)
+- [GitHub Repository](https://github.com/Adityaakr/vara-mcp-server)
 - [Vara Network](https://vara.network/)
 - [Sails Framework](https://docs.gear.rs/sails/)
-- [Gear Protocol](https://gear-tech.io/)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
+
+---
+
+<p align="center">
+  <b>Built for the Vara Network ecosystem</b><br>
+  <sub>Supercharge your Vara development with AI ⚡</sub>
+</p>
