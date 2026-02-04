@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "vara-mcp": {
+      "command": "node",
+      "args": ["REPLACE_WITH_ABSOLUTE_PATH/packages/server/dist/index.js"],
+      "env": {
+        "VARA_WORKSPACE_ROOT": "${workspaceFolder}",
+        "VARA_DEBUG": "false"
+      }
+    }
+  }
+}

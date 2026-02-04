@@ -1,0 +1,64 @@
+{
+  "name": "@vara-network/mcp-server",
+  "version": "0.1.0",
+  "description": "MCP server for Vara Network smart program development with Sails",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "vara-mcp": "./dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "@vara-mcp/runtime": "workspace:*",
+    "@vara-mcp/templates": "workspace:*",
+    "@vara-mcp/chain": "workspace:*",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vara-network/vara-mcp.git",
+    "directory": "packages/server"
+  },
+  "bugs": {
+    "url": "https://github.com/vara-network/vara-mcp/issues"
+  },
+  "homepage": "https://github.com/vara-network/vara-mcp#readme",
+  "keywords": [
+    "vara",
+    "vara-network",
+    "gear",
+    "sails",
+    "mcp",
+    "model-context-protocol",
+    "smart-contracts",
+    "blockchain",
+    "cursor",
+    "ai-assistant"
+  ]
+}

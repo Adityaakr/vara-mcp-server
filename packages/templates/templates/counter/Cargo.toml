@@ -1,0 +1,29 @@
+[package]
+name = "{{PROJECT_NAME}}"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+sails-rs = "0.6"
+gstd = "1.6"
+parity-scale-codec = { version = "3.6", default-features = false, features = ["derive"] }
+scale-info = { version = "2.11", default-features = false, features = ["derive"] }
+
+[dev-dependencies]
+gtest = "1.6"
+sails-rs = { version = "0.6", features = ["gtest"] }
+tokio = { version = "1", features = ["full"] }
+
+[build-dependencies]
+sails-rs = { version = "0.6", features = ["wasm-builder"] }
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = []
+
+[profile.release]
+opt-level = "s"
+lto = true
