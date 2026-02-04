@@ -6,7 +6,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "vara-mcp": "./dist/index.js"
+    "vara-mcp": "./dist/cli.js",
+    "vara-mcp-server": "./dist/index.js"
   },
   "exports": {
     ".": {

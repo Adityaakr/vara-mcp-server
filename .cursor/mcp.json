@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "vara-mcp": {
+      "command": "node",
+      "args": ["/Users/adityakumar/Desktop/vara-mcp/packages/server/dist/index.js"]
+    }
+  }
+}

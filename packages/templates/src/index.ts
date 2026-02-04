@@ -4,10 +4,14 @@ export {
   TEMPLATES,
   getAvailableTemplates,
   getTemplateInfo,
-  getTemplatePath,
   templateExists,
   readTemplateFile,
   getTemplateFiles,
   scaffoldFromTemplate,
   validateProjectName,
 } from './templates.js';
+
+export {
+  getEmbeddedTemplate,
+  getEmbeddedTemplateNames,
+} from './embedded.js';

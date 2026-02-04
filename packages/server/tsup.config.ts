@@ -1,17 +1,16 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: ['src/index.ts', 'src/cli.ts'],
   format: ['esm'],
-  dts: true,
+  dts: { entry: ['src/index.ts'] },
   clean: true,
   sourcemap: true,
   target: 'node18',
+  splitting: false, // Don't split into chunks - each file is standalone
   banner: {
     js: '#!/usr/bin/env node',
   },
-  // Bundle workspace dependencies into the output
-  // Only externalize actual npm packages
   noExternal: [
     '@vara-mcp/runtime',
     '@vara-mcp/templates', 

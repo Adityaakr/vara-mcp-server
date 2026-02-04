@@ -1,14 +1,7 @@
-import { readFileSync, readdirSync, statSync, existsSync, writeFileSync, mkdirSync } from 'node:fs';
-import { join, dirname, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { existsSync, writeFileSync, mkdirSync } from 'node:fs';
+import { join, dirname } from 'node:path';
 import type { TemplateName, TemplateInfo, TemplateVariables, ScaffoldResult } from './types.js';
-
-// Get the directory of this module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Templates directory (relative to built dist or source)
-const TEMPLATES_DIR = join(__dirname, '..', 'templates');
+import { getEmbeddedTemplate, getEmbeddedTemplateNames } from './embedded.js';
 
 /**
  * Available templates registry
@@ -35,7 +28,7 @@ export const TEMPLATES: Record<TemplateName, TemplateInfo> = {
  * Get all available template names
  */
 export function getAvailableTemplates(): TemplateName[] {
-  return Object.keys(TEMPLATES) as TemplateName[];
+  return getEmbeddedTemplateNames() as TemplateName[];
 }
 
 /**
@@ -46,35 +39,32 @@ export function getTemplateInfo(name: TemplateName): TemplateInfo | undefined {
 }
 
 /**
- * Get the path to a template directory
- */
-export function getTemplatePath(name: TemplateName): string {
-  return join(TEMPLATES_DIR, name);
-}
-
-/**
  * Check if a template exists
  */
 export function templateExists(name: TemplateName): boolean {
-  const templatePath = getTemplatePath(name);
-  return existsSync(templatePath);
+  return getEmbeddedTemplate(name) !== undefined;
 }
 
 /**
- * Read a template file and substitute variables
+ * Read a template file content and substitute variables
  */
 export function readTemplateFile(
   templateName: TemplateName,
   filePath: string,
   variables: TemplateVariables
 ): string {
-  const fullPath = join(getTemplatePath(templateName), filePath);
+  const template = getEmbeddedTemplate(templateName);
   
-  if (!existsSync(fullPath)) {
-    throw new Error(`Template file not found: ${fullPath}`);
+  if (!template) {
+    throw new Error(`Template not found: ${templateName}`);
   }
 
-  let content = readFileSync(fullPath, 'utf-8');
+  const file = template.files.find(f => f.path === filePath);
+  if (!file) {
+    throw new Error(`Template file not found: ${filePath} in ${templateName}`);
+  }
+
+  let content = file.content;
 
   // Substitute all variables
   for (const [key, value] of Object.entries(variables)) {
@@ -86,30 +76,14 @@ export function readTemplateFile(
 }
 
 /**
- * Get all files in a template directory recursively
+ * Get all files in a template
  */
 export function getTemplateFiles(templateName: TemplateName): string[] {
-  const templatePath = getTemplatePath(templateName);
-  const files: string[] = [];
-
-  function walkDir(dir: string): void {
-    const entries = readdirSync(dir);
-    for (const entry of entries) {
-      const fullPath = join(dir, entry);
-      const stat = statSync(fullPath);
-      if (stat.isDirectory()) {
-        walkDir(fullPath);
-      } else {
-        files.push(relative(templatePath, fullPath));
-      }
-    }
+  const template = getEmbeddedTemplate(templateName);
+  if (!template) {
+    return [];
   }
-
-  if (existsSync(templatePath)) {
-    walkDir(templatePath);
-  }
-
-  return files;
+  return template.files.map(f => f.path);
 }
 
 /**
@@ -120,9 +94,9 @@ export function scaffoldFromTemplate(
   targetDir: string,
   variables: TemplateVariables
 ): ScaffoldResult {
-  const templatePath = getTemplatePath(templateName);
+  const template = getEmbeddedTemplate(templateName);
   
-  if (!existsSync(templatePath)) {
+  if (!template) {
     throw new Error(`Template not found: ${templateName}`);
   }
 
@@ -131,12 +105,18 @@ export function scaffoldFromTemplate(
     mkdirSync(targetDir, { recursive: true });
   }
 
-  const files = getTemplateFiles(templateName);
   const createdFiles: string[] = [];
 
-  for (const file of files) {
-    const content = readTemplateFile(templateName, file, variables);
-    const targetPath = join(targetDir, file);
+  for (const file of template.files) {
+    let content = file.content;
+    
+    // Substitute all variables
+    for (const [key, value] of Object.entries(variables)) {
+      const placeholder = `{{${key}}}`;
+      content = content.split(placeholder).join(value);
+    }
+    
+    const targetPath = join(targetDir, file.path);
     const targetDirPath = dirname(targetPath);
 
     // Ensure directory exists
@@ -146,7 +126,7 @@ export function scaffoldFromTemplate(
 
     // Write the file
     writeFileSync(targetPath, content, 'utf-8');
-    createdFiles.push(file);
+    createdFiles.push(file.path);
   }
 
   // Generate next steps based on template
