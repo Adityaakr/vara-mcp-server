@@ -1,6 +1,6 @@
 {
   "name": "vara-mcp-server",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "MCP server for Vara Network smart program development with Sails",
   "type": "module",
   "main": "./dist/index.js",
