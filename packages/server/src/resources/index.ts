@@ -70,47 +70,47 @@ Create a new Rust project with the following \`Cargo.toml\`:
 [package]
 name = "my-program"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
-sails-rs = "0.6"
-gstd = "1.6"
-parity-scale-codec = { version = "3.6", default-features = false, features = ["derive"] }
-scale-info = { version = "2.11", default-features = false, features = ["derive"] }
+sails-rs = "0.10"
 
 [build-dependencies]
-sails-rs = { version = "0.6", features = ["wasm-builder"] }
+sails-rs = { version = "0.10", features = ["wasm-builder"] }
 
 [lib]
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "rlib"]
+\`\`\`
+
+And a \`rust-toolchain.toml\`:
+\`\`\`toml
+[toolchain]
+channel = "stable"
+targets = ["wasm32-unknown-unknown", "wasm32v1-none"]
 \`\`\`
 
 ## Program Structure
 
 ### Service Definition
 
-Services contain your business logic:
+Services contain your business logic. Use \`#[export]\` to expose methods:
 
 \`\`\`rust
 #![no_std]
 use sails_rs::prelude::*;
 
-#[derive(Default)]
 pub struct MyService;
 
 #[sails_rs::service]
 impl MyService {
-    pub fn new() -> Self {
-        Self
-    }
-    
     // Commands mutate state
+    #[export]
     pub fn do_action(&mut self, input: u32) -> u32 {
-        // Your logic here
         input * 2
     }
     
     // Queries read state
+    #[export]
     pub fn get_value(&self) -> u32 {
         42
     }
@@ -237,7 +237,7 @@ error[E0432]: unresolved import 'sails_rs'
 **Solution:** Add to Cargo.toml:
 \`\`\`toml
 [dependencies]
-sails-rs = "0.6"
+sails-rs = "0.10"
 \`\`\`
 
 ### Build Script Errors

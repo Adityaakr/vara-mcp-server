@@ -173,6 +173,7 @@ async function handleCompile(args: string[], workspaceRoot: string): Promise<voi
     {
       projectPath,
       release: values.release,
+      target: 'wasm32v1-none',
       verbose: values.verbose,
     },
     workspaceRoot
@@ -254,6 +255,7 @@ async function handleClient(args: string[], workspaceRoot: string): Promise<void
     {
       projectPath,
       outDir: values['out-dir'],
+      language: 'ts' as const,
     },
     workspaceRoot
   );

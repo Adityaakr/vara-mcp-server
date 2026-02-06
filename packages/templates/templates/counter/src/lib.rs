@@ -1,170 +1,101 @@
 //! {{PROJECT_NAME}} - A simple counter smart program for Vara Network
 //!
-//! This program demonstrates basic Sails patterns:
+//! Built with Sails framework (sails-rs 0.10)
+//!
+//! Demonstrates:
 //! - Service definition with state
-//! - Commands (state mutations)
+//! - Commands (state mutations) with #[export]
 //! - Queries (state reads)
-//! - Events
+//! - Events via #[event] and emit_event
 
 #![no_std]
 
 use sails_rs::prelude::*;
 
-/// Counter service state
-static mut COUNTER_STATE: Option<CounterState> = None;
-
-/// Internal state structure
-#[derive(Default)]
-struct CounterState {
-    value: i64,
-    owner: ActorId,
-}
-
-/// The Counter service provides increment/decrement operations
-/// with query capabilities
-#[derive(Default)]
-pub struct CounterService;
+/// Global counter state
+static mut COUNTER: u64 = 0;
 
 /// Events emitted by the Counter service
-#[derive(Debug, Encode, Decode, TypeInfo)]
+#[event]
+#[derive(Clone, Debug, PartialEq, Encode, TypeInfo)]
 #[codec(crate = sails_rs::scale_codec)]
 #[scale_info(crate = sails_rs::scale_info)]
 pub enum CounterEvent {
-    /// Emitted when the counter value changes
-    ValueChanged { old_value: i64, new_value: i64 },
+    /// Emitted when a value is added
+    Added(u64),
+    /// Emitted when a value is subtracted
+    Subtracted(u64),
     /// Emitted when the counter is reset
-    Reset { by: ActorId },
+    Reset,
+}
+
+/// Counter service
+pub struct CounterService;
+
+impl CounterService {
+    pub fn new() -> Self {
+        Self
+    }
 }
 
 #[sails_rs::service(events = CounterEvent)]
 impl CounterService {
-    /// Create a new counter service instance
-    pub fn new() -> Self {
-        Self
-    }
-
-    /// Initialize the counter state (called once at program init)
-    pub fn init(&mut self) {
+    /// Add a value to the counter
+    #[export]
+    pub fn add(&mut self, value: u64) -> u64 {
         unsafe {
-            COUNTER_STATE = Some(CounterState {
-                value: 0,
-                owner: gstd::msg::source(),
-            });
+            COUNTER = COUNTER.saturating_add(value);
+            self.emit_event(CounterEvent::Added(value)).unwrap();
+            COUNTER
         }
     }
 
-    /// Increment the counter by 1
-    /// Returns the new value
-    pub fn increment(&mut self) -> i64 {
-        let (old_value, new_value) = {
-            let state = self.state_mut();
-            let old = state.value;
-            state.value = state.value.saturating_add(1);
-            (old, state.value)
-        };
-        
-        self.notify_on(CounterEvent::ValueChanged {
-            old_value,
-            new_value,
-        })
-        .expect("Failed to emit event");
-        
-        new_value
+    /// Subtract a value from the counter
+    #[export]
+    pub fn sub(&mut self, value: u64) -> u64 {
+        unsafe {
+            COUNTER = COUNTER.saturating_sub(value);
+            self.emit_event(CounterEvent::Subtracted(value)).unwrap();
+            COUNTER
+        }
     }
 
-    /// Decrement the counter by 1
-    /// Returns the new value
-    pub fn decrement(&mut self) -> i64 {
-        let (old_value, new_value) = {
-            let state = self.state_mut();
-            let old = state.value;
-            state.value = state.value.saturating_sub(1);
-            (old, state.value)
-        };
-        
-        self.notify_on(CounterEvent::ValueChanged {
-            old_value,
-            new_value,
-        })
-        .expect("Failed to emit event");
-        
-        new_value
+    /// Increment by 1
+    #[export]
+    pub fn increment(&mut self) -> u64 {
+        self.add(1)
     }
 
-    /// Add a specific amount to the counter
-    /// Returns the new value
-    pub fn add(&mut self, amount: i64) -> i64 {
-        let (old_value, new_value) = {
-            let state = self.state_mut();
-            let old = state.value;
-            state.value = state.value.saturating_add(amount);
-            (old, state.value)
-        };
-        
-        self.notify_on(CounterEvent::ValueChanged {
-            old_value,
-            new_value,
-        })
-        .expect("Failed to emit event");
-        
-        new_value
+    /// Decrement by 1
+    #[export]
+    pub fn decrement(&mut self) -> u64 {
+        self.sub(1)
     }
 
-    /// Reset the counter to zero (only owner can do this)
-    pub fn reset(&mut self) -> Result<i64, &'static str> {
-        let caller = gstd::msg::source();
-        
-        let old_value = {
-            let state = self.state_mut();
-            if caller != state.owner {
-                return Err("Only owner can reset the counter");
-            }
-            let old = state.value;
-            state.value = 0;
-            old
-        };
-        
-        self.notify_on(CounterEvent::Reset { by: caller })
-            .expect("Failed to emit event");
-        self.notify_on(CounterEvent::ValueChanged {
-            old_value,
-            new_value: 0,
-        })
-        .expect("Failed to emit event");
-        
-        Ok(0)
+    /// Reset the counter to zero
+    #[export]
+    pub fn reset(&mut self) -> u64 {
+        unsafe {
+            COUNTER = 0;
+            self.emit_event(CounterEvent::Reset).unwrap();
+            COUNTER
+        }
     }
 
-    /// Query the current counter value
-    pub fn value(&self) -> i64 {
-        self.state().value
-    }
-
-    /// Query the owner of this counter
-    pub fn owner(&self) -> ActorId {
-        self.state().owner
-    }
-
-    /// Internal helper to get immutable state
-    fn state(&self) -> &CounterState {
-        unsafe { COUNTER_STATE.as_ref().expect("State not initialized") }
-    }
-
-    /// Internal helper to get mutable state
-    fn state_mut(&mut self) -> &mut CounterState {
-        unsafe { COUNTER_STATE.as_mut().expect("State not initialized") }
+    /// Get the current counter value
+    #[export]
+    pub fn value(&self) -> u64 {
+        unsafe { COUNTER }
     }
 }
 
-/// The main program structure
+/// The main program
 pub struct CounterProgram;
 
 #[sails_rs::program]
 impl CounterProgram {
-    /// Program constructor - initializes the counter
+    /// Program constructor
     pub fn new() -> Self {
-        let mut service = CounterService::new();
-        service.init();
         Self
     }
 
