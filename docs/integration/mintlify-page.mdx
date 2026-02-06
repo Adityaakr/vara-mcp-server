@@ -90,7 +90,7 @@ After installing, open Cursor and use the built-in prompts:
 |-------------|---------|--------------|
 | Node.js | 18+ | [nodejs.org](https://nodejs.org) |
 | Rust | Latest stable | [rustup.rs](https://rustup.rs) |
-| WASM Target | - | `rustup target add wasm32v1-none` |
+| Build output | - | Scaffold uses `target/wasm32-gear/release/` only (no wasm32-unknown-unknown) |
 
 ## Configuration Options
 
@@ -128,11 +128,8 @@ After installing, open Cursor and use the built-in prompts:
   ```
 </Accordion>
 
-<Accordion title="WASM target missing">
-  Add the WASM compilation target:
-  ```bash
-  rustup target add wasm32v1-none
-  ```
+<Accordion title="Build output location">
+  Scaffolded projects output to `target/wasm32-gear/release/` (`.wasm`, `.opt.wasm`, `.idl`). Run `cargo build --release`.
 </Accordion>
 
 <Accordion title="MCP server not loading">

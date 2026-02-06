@@ -37,7 +37,7 @@ Sails is a framework for building smart programs on the Vara Network.
 It provides a high-level abstraction over the low-level Gear Protocol.
 
 ## Prerequisites
-- Rust toolchain with wasm32-unknown-unknown target
+- Rust toolchain; template outputs to target/wasm32-gear/release/ (.idl always generated)
 - cargo-sails CLI (optional but recommended)
 
 ## Quick Start
@@ -125,11 +125,12 @@ The constructor is called when the program is initialized on-chain.
     content: `
 ## Build Targets
 
-The default target for Vara programs is wasm32-unknown-unknown.
+The default target for Vara programs is wasm32-gear. Build output goes to target/wasm32-gear/release/ (.wasm, .opt.wasm, .idl always generated).
 
-### Installing the Target
+### Output (template)
+The scaffold includes \`.cargo/config.toml\` and \`.cargo/wasm32-gear.json\`, so \`cargo build --release\` outputs to \`target/wasm32-gear/release/\` with \`.wasm\`, \`.opt.wasm\`, and \`.idl\` (no wasm32-unknown-unknown).
 \`\`\`bash
-rustup target add wasm32-unknown-unknown
+cargo build --release
 \`\`\`
 
 ### Build Commands
@@ -144,9 +145,9 @@ cargo build --release
 \`\`\`
 
 ### Output Files
-- target/wasm32-unknown-unknown/release/*.wasm - The compiled WASM
-- target/wasm32-unknown-unknown/release/*.opt.wasm - Optimized WASM
-- target/wasm32-unknown-unknown/release/*.idl - Interface definition
+- target/wasm32-gear/release/*.wasm - The compiled WASM
+- target/wasm32-gear/release/*.opt.wasm - Optimized WASM
+- target/wasm32-gear/release/*.idl - Application interface (always generated)
     `,
     keywords: ['build', 'wasm', 'target', 'release', 'debug', 'compile'],
   },
@@ -159,7 +160,7 @@ cargo build --release
 
 ### Target Not Installed
 Error: "error[E0463]: can't find crate for 'std'"
-Solution: rustup target add wasm32-unknown-unknown
+Solution: Ensure .cargo/config.toml and .cargo/wasm32-gear.json exist (from template); then cargo build --release
 
 ### Missing sails-rs
 Error: "can't find crate 'sails_rs'"
@@ -219,7 +220,7 @@ import { GearApi, GearKeyring } from '@gear-js/api';
 import { readFileSync } from 'fs';
 
 // Read WASM file
-const code = readFileSync('./target/wasm32-unknown-unknown/release/my_program.opt.wasm');
+const code = readFileSync('./target/wasm32-gear/release/my_program.opt.wasm');
 
 // Create keyring
 const keyring = await GearKeyring.fromSuri('//Alice');

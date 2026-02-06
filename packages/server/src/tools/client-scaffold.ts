@@ -111,8 +111,8 @@ function findBuildArtifacts(projectPath: string): { wasmPath: string | null; idl
   // Look in release first, then debug
   const profiles = ['release', 'debug'];
   
-  // Check new wasm32-gear directory first, then legacy wasm32-unknown-unknown
-  const targets = ['wasm32-gear', 'wasm32-unknown-unknown'];
+  // Template outputs to target/wasm32-gear/release/ only
+  const targets = ['wasm32-gear', 'wasm32v1-none'];
 
   for (const target of targets) {
     for (const profile of profiles) {

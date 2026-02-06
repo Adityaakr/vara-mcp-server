@@ -90,13 +90,10 @@ Just tell Cursor: *"Create a new Vara counter program called my-counter"*
 ## Requirements
 
 - **Node.js** 18+
-- **Rust** with `wasm32v1-none` target
+- **Rust** (stable)
 - **Cursor IDE**
 
-```bash
-# Install Rust WASM target if needed
-rustup target add wasm32v1-none
-```
+Scaffolded projects build to `target/wasm32-gear/release/` only (`.wasm`, `.opt.wasm`, `.idl` always generated). No wasm32-unknown-unknown.
 
 ## Environment Variables (Optional)
 

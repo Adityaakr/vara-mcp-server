@@ -69,7 +69,7 @@ source $HOME/.cargo/env
 **Solution:** Install the WASM target:
 
 ```bash
-rustup target add wasm32v1-none
+cargo build --release  # scaffold uses target/wasm32-gear/release/ only
 ```
 
 ### Sails CLI not found

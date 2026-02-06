@@ -163,7 +163,7 @@ await client.initKeyring(process.env.VARA_SEED);
 
 // Upload program
 const programId = await client.uploadProgram({
-  wasmPath: './target/wasm32-unknown-unknown/release/my_token.opt.wasm'
+  wasmPath: './target/wasm32-gear/release/my_token.opt.wasm'
 });
 
 // Interact
@@ -239,10 +239,8 @@ vara-mcp-server/
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-### WASM target not installed
-```bash
-rustup target add wasm32-unknown-unknown
-```
+### Build output location
+Scaffolded projects use \`target/wasm32-gear/release/\` (no wasm32-unknown-unknown). Run \`cargo build --release\`; \`.wasm\`, \`.opt.wasm\`, and \`.idl\` are always generated there.
 
 ### Server not connecting in Cursor
 1. Check path in `.cursor/mcp.json`

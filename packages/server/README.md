@@ -163,7 +163,7 @@ await client.initKeyring(process.env.VARA_SEED);
 
 // Upload program
 const programId = await client.uploadProgram({
-  wasmPath: './target/wasm32-unknown-unknown/release/my_token.opt.wasm'
+  wasmPath: './target/wasm32-gear/release/my_token.opt.wasm'
 });
 
 // Interact
@@ -241,7 +241,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 ### WASM target not installed
 ```bash
-rustup target add wasm32-unknown-unknown
+cargo build --release  # output: target/wasm32-gear/release/ (.wasm, .opt.wasm, .idl)
 ```
 
 ### Server not connecting in Cursor

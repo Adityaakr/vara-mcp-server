@@ -131,7 +131,6 @@ async function scaffoldWithSailsCli(
     createdFiles,
     nextSteps: [
       `cd ${name}`,
-      'rustup target add wasm32-unknown-unknown',
       'cargo build --release',
       'cargo test',
     ],

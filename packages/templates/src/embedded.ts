@@ -51,6 +51,7 @@ lto = true
     {
       path: 'build.rs',
       content: `fn main() {
+    // Builds WASM and always generates .wasm, .opt.wasm, and .idl in target/wasm32-gear/release/
     sails_rs::build_wasm();
 }
 `,
@@ -255,11 +256,14 @@ A counter smart program for Vara Network built with Sails 0.10.
 ## Building
 
 \`\`\`bash
-rustup target add wasm32v1-none
 cargo build --release
 \`\`\`
 
-Output: \`target/wasm32-gear/release/\` (\`.wasm\`, \`.opt.wasm\`, \`.idl\`)
+Output goes to \`target/wasm32-gear/release/\`:
+
+- **\`.wasm\`** – built WASM binary
+- **\`.opt.wasm\`** – optimized WASM (use for deployment)
+- **\`.idl\`** – application interface (IDL), always generated
 
 ## Testing
 
@@ -303,7 +307,22 @@ Cargo.lock
       path: 'rust-toolchain.toml',
       content: `[toolchain]
 channel = "stable"
-targets = ["wasm32-unknown-unknown", "wasm32v1-none"]
+targets = ["wasm32v1-none"]
+`,
+    },
+    {
+      path: '.cargo/config.toml',
+      content: `# Output to target/wasm32-gear/release/ (same codegen as wasm32v1-none)
+[env]
+RUST_TARGET_PATH = { value = ".cargo", relative = true }
+
+[build]
+target = "wasm32-gear"
+`,
+    },
+    {
+      path: '.cargo/wasm32-gear.json',
+      content: `{"arch":"wasm32","binary-format":"wasm","cpu":"mvp","crt-objects-fallback":"true","data-layout":"e-m:e-p:32:32-p10:8:8-p20:8:8-i64:64-i128:128-n32:64-S128-ni:1:10:20","dll-prefix":"","dll-suffix":".wasm","dynamic-linking":true,"eh-frame-header":false,"emit-debug-gdb-scripts":false,"exe-suffix":".wasm","features":"+mutable-globals","generate-arange-section":false,"has-thread-local":true,"is-like-wasm":true,"linker":"rust-lld","linker-flavor":"wasm-lld","linker-is-gnu":false,"lld-flavor":"wasm","llvm-target":"wasm32-unknown-unknown","max-atomic-width":64,"metadata":{"description":"WebAssembly (Gear/Vara)","host_tools":false,"std":false,"tier":2},"only-cdylib":true,"panic-strategy":"abort","pre-link-args":{"wasm-lld":["-z","stack-size=1048576","--stack-first","--allow-undefined","--no-demangle","--no-entry"],"wasm-lld-cc":["-Wl,-z","-Wl,stack-size=1048576","-Wl,--stack-first","-Wl,--allow-undefined","-Wl,--no-demangle","--target=wasm32-unknown-unknown","-Wl,--no-entry"]},"relocation-model":"static","singlethread":true,"target-family":["wasm"],"target-pointer-width":32,"tls-model":"local-exec"}
 `,
     },
   ],

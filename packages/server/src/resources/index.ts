@@ -50,7 +50,7 @@ deploy smart programs.
 Before you begin, ensure you have:
 
 1. **Rust toolchain** installed via [rustup](https://rustup.rs/)
-2. **WASM target** added: \`rustup target add wasm32v1-none\`
+2. **Template** includes \`.cargo/config.toml\` so output goes to \`target/wasm32-gear/release/\` (no wasm32-unknown-unknown)
 3. **Sails CLI** (optional): \`cargo install sails-cli\`
 
 ## Creating a New Program
@@ -86,7 +86,7 @@ And a \`rust-toolchain.toml\`:
 \`\`\`toml
 [toolchain]
 channel = "stable"
-targets = ["wasm32-unknown-unknown", "wasm32v1-none"]
+targets = ["wasm32v1-none"]
 \`\`\`
 
 ## Program Structure
@@ -178,14 +178,9 @@ cargo test
 
 ## Build Targets
 
-### Modern Target: wasm32v1-none (Recommended)
+### Output: target/wasm32-gear/ only (no wasm32-unknown-unknown)
 
-This is the current standard target for Vara/Sails programs. The old wasm32-unknown-unknown 
-target is now considered legacy and should only be used for older projects.
-
-\`\`\`bash
-rustup target add wasm32v1-none
-\`\`\`
+The scaffold includes \`.cargo/config.toml\` and \`.cargo/wasm32-gear.json\`, so build output goes only to \`target/wasm32-gear/release/\` with \`.wasm\`, \`.opt.wasm\`, and \`.idl\` always generated.
 
 ### Build Commands
 
@@ -199,13 +194,13 @@ cargo build --release
 
 ### Output Locations
 
-Sails builds output to the \`target/wasm32-gear/\` directory:
+Build output goes to \`target/wasm32-gear/\` (.wasm, .opt.wasm, .idl always generated):
 
 \`\`\`
 target/wasm32-gear/release/
 ├── my_program.wasm       # Built WASM file
-├── my_program.opt.wasm   # Optimized WASM file (use this for deployment)
-└── my_program.idl        # Application interface IDL file
+├── my_program.opt.wasm   # Optimized WASM (use for deployment)
+└── my_program.idl        # Application interface (IDL), always generated
 \`\`\`
 
 | Build Type | Location |
@@ -222,10 +217,7 @@ target/wasm32-gear/release/
 error[E0463]: can't find crate for 'std'
 \`\`\`
 
-**Solution:**
-\`\`\`bash
-rustup target add wasm32v1-none
-\`\`\`
+**Solution:** Use the scaffolded template (it includes \`.cargo/wasm32-gear.json\`). Then \`cargo build --release\` outputs to \`target/wasm32-gear/release/\` with no wasm32-unknown-unknown.
 
 ### Missing sails-rs Crate
 

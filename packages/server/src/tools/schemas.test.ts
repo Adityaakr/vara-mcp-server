@@ -68,7 +68,7 @@ describe('compileSchema', () => {
     const input = {};
     const result = compileSchema.parse(input);
     expect(result.release).toBe(true);
-    expect(result.target).toBe('wasm32v1-none');
+    expect(result.target).toBe('wasm32-gear');
     expect(result.verbose).toBe(false);
   });
 
@@ -77,7 +77,7 @@ describe('compileSchema', () => {
       workspacePath: '/path/to/workspace',
       projectPath: 'my-project',
       release: false,
-      target: 'wasm32-unknown-unknown',
+      target: 'wasm32v1-none',
       verbose: true,
     };
     const result = compileSchema.parse(input);

@@ -1,0 +1,7 @@
+# Use wasm32-gear so build output goes to target/wasm32-gear/release/
+# (same codegen as wasm32v1-none, but output folder name is wasm32-gear)
+[env]
+RUST_TARGET_PATH = { value = ".cargo", relative = true }
+
+[build]
+target = "wasm32-gear"

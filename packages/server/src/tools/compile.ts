@@ -98,14 +98,11 @@ export async function compileProgram(
     };
   }
 
-  // Find output files
-  // Sails/Vara builds output to target/wasm32-gear/{profile}/ regardless of target
+  // Find output files: template uses target wasm32-gear → target/wasm32-gear/release/
   const profile = release ? 'release' : 'debug';
-  
-  // Check both the new wasm32-gear directory and legacy target directory
   const possibleTargetDirs = [
-    join(effectiveProjectPath, 'target', 'wasm32-gear', profile),  // New Sails output
-    join(effectiveProjectPath, 'target', target, profile),         // Legacy/direct target
+    join(effectiveProjectPath, 'target', 'wasm32-gear', profile),
+    join(effectiveProjectPath, 'target', target, profile),
   ];
 
   const wasmPaths: string[] = [];
