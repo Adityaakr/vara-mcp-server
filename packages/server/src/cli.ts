@@ -173,7 +173,7 @@ async function handleCompile(args: string[], workspaceRoot: string): Promise<voi
     {
       projectPath,
       release: values.release,
-      target: 'wasm32-gear',
+      target: 'wasm32v1-none',
       verbose: values.verbose,
     },
     workspaceRoot

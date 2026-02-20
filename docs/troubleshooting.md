@@ -64,12 +64,13 @@ source $HOME/.cargo/env
 
 ### WASM target not installed
 
-**Symptom:** Build fails with "can't find crate for 'std'" or target errors.
+**Symptom:** Build fails with "can't find crate for 'core'" or "Rust target ... is not installed".
 
-**Solution:** Install the WASM target:
+**Solution:** Add the Vara WASM target, then build:
 
 ```bash
-cargo build --release  # scaffold uses target/wasm32-gear/release/ only
+rustup target add wasm32v1-none
+cargo build --release   # output: target/wasm32v1-none/release/
 ```
 
 ### Sails CLI not found

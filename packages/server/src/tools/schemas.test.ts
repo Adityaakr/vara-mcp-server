@@ -68,7 +68,7 @@ describe('compileSchema', () => {
     const input = {};
     const result = compileSchema.parse(input);
     expect(result.release).toBe(true);
-    expect(result.target).toBe('wasm32-gear');
+    expect(result.target).toBe('wasm32v1-none');
     expect(result.verbose).toBe(false);
   });
 

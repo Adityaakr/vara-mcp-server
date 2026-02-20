@@ -111,8 +111,8 @@ function findBuildArtifacts(projectPath: string): { wasmPath: string | null; idl
   // Look in release first, then debug
   const profiles = ['release', 'debug'];
   
-  // Template outputs to target/wasm32-gear/release/ only
-  const targets = ['wasm32-gear', 'wasm32v1-none'];
+  // Template outputs to target/wasm32v1-none/release/ (or wasm32-gear for older scaffolds)
+  const targets = ['wasm32v1-none', 'wasm32-gear'];
 
   for (const target of targets) {
     for (const profile of profiles) {

@@ -140,10 +140,11 @@ Create a Vara smart program called "my-token" using the counter template
 Compile my-token in release mode
 ```
 
-Output:
+Output (in `target/wasm32v1-none/wasm32-gear/release/`):
 ```
-✓ my_token.opt.wasm (73 KB)
+✓ my_token.opt.wasm
 ✓ my_token.idl
+✓ my_token.wasm
 ```
 
 ### 3. Generate TypeScript Client
@@ -163,7 +164,7 @@ await client.initKeyring(process.env.VARA_SEED);
 
 // Upload program
 const programId = await client.uploadProgram({
-  wasmPath: './target/wasm32-gear/release/my_token.opt.wasm'
+  wasmPath: './target/wasm32v1-none/wasm32-gear/release/my_token.opt.wasm'
 });
 
 // Interact
@@ -195,6 +196,7 @@ See [security.md](docs/security.md) for details.
 - Node.js 18+
 - pnpm 9+
 - Rust toolchain (for testing builds)
+- WASM target for Vara: `rustup target add wasm32v1-none`
 
 ### Setup
 
@@ -240,7 +242,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
 ### Build output location
-Scaffolded projects use \`target/wasm32-gear/release/\` (no wasm32-unknown-unknown). Run \`cargo build --release\`; \`.wasm\`, \`.opt.wasm\`, and \`.idl\` are always generated there.
+Run \`rustup target add wasm32v1-none\`, then \`cargo build --release\`. All artifacts are in **one folder**: \`target/wasm32v1-none/wasm32-gear/release/\` (`.opt.wasm`, `.idl`, `.wasm`).
 
 ### Server not connecting in Cursor
 1. Check path in `.cursor/mcp.json`

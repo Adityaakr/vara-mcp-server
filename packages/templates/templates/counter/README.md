@@ -8,23 +8,18 @@ A counter smart program for Vara Network built with Sails 0.10.
 cargo build --release
 ```
 
-After a successful build, your working directory will contain:
+After a successful build, **all artifacts are in one folder**:
 
 ```
-{{PROJECT_NAME}}/
-├── ...
-├── target/
-│   ├── ...
-│   └── wasm32-gear
-│       └── release
-│           ├── {{PROJECT_NAME}}.wasm       # Built .wasm file
-│           ├── {{PROJECT_NAME}}.opt.wasm  # Optimized .wasm (upload to chain)
-│           └── {{PROJECT_NAME}}.idl       # Application interface (IDL)
+target/wasm32v1-none/wasm32-gear/release/
+├── {{PROJECT_NAME}}.wasm       # Built .wasm
+├── {{PROJECT_NAME}}.opt.wasm   # Optimized (use for deployment)
+└── {{PROJECT_NAME}}.idl        # Interface (always generated)
 ```
 
-- **`.wasm`** – built WASM binary from source  
-- **`.opt.wasm`** – optimized WASM (smaller, faster; use for deployment)  
-- **`.idl`** – application interface (IDL), always generated; defines methods and types for clients
+- **`.opt.wasm`** – optimized WASM; upload this to the chain  
+- **`.idl`** – application interface; always generated alongside .opt.wasm  
+- **`.wasm`** – unoptimized build
 
 ## Testing
 

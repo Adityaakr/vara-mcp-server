@@ -1,7 +1,3 @@
-# Use wasm32-gear so build output goes to target/wasm32-gear/release/
-# (same codegen as wasm32v1-none, but output folder name is wasm32-gear)
-[env]
-RUST_TARGET_PATH = { value = ".cargo", relative = true }
-
+# Vara Network (Gear v1.8.0+): use wasm32v1-none (install: rustup target add wasm32v1-none)
 [build]
-target = "wasm32-gear"
+target = "wasm32v1-none"

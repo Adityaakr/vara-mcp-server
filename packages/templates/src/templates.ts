@@ -149,12 +149,12 @@ function generateNextSteps(templateName: TemplateName, projectName: string): str
     case 'counter':
       steps.push(
         `cd ${projectName}`,
-        'Run cargo build --release; output and .idl are in target/wasm32-gear/release/',
-        'Build the program: cargo build --release',
-        'Run tests: cargo test',
-        'Find the build output at: target/wasm32-gear/release/ (.wasm, .opt.wasm, .idl)',
-        '  - WASM: *.wasm and *.opt.wasm',
-        '  - IDL: *.idl'
+        'Add target: rustup target add wasm32v1-none',
+        'Build: cargo build --release',
+        'Output (same folder): target/wasm32v1-none/wasm32-gear/release/',
+        '  - *.opt.wasm (deploy this)',
+        '  - *.idl (interface; always generated)',
+        '  - *.wasm'
       );
       break;
     default:

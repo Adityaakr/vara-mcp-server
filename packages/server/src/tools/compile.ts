@@ -98,9 +98,11 @@ export async function compileProgram(
     };
   }
 
-  // Find output files: template uses target wasm32-gear → target/wasm32-gear/release/
+  // Find output files: wasm32v1-none/release/ (cargo); sails may also put .opt.wasm in wasm32v1-none/wasm32-gear/release/
   const profile = release ? 'release' : 'debug';
   const possibleTargetDirs = [
+    join(effectiveProjectPath, 'target', 'wasm32v1-none', profile),
+    join(effectiveProjectPath, 'target', 'wasm32v1-none', 'wasm32-gear', profile),
     join(effectiveProjectPath, 'target', 'wasm32-gear', profile),
     join(effectiveProjectPath, 'target', target, profile),
   ];

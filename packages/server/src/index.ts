@@ -147,8 +147,8 @@ function registerToolHandlers(server: Server): void {
               },
               target: {
                 type: 'string',
-                default: 'wasm32-gear',
-                description: 'Build target (wasm32-gear → target/wasm32-gear/release/)',
+                default: 'wasm32v1-none',
+                description: 'Build target (wasm32v1-none → target/wasm32v1-none/release/; install: rustup target add wasm32v1-none)',
               },
               verbose: {
                 type: 'boolean',
