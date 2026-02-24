@@ -19,7 +19,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vara-network/verify-vara.git"
+    "url": "git+https://github.com/Adityaakr/vara-mcp-server.git"
   },
   "files": [
     "README.md",
