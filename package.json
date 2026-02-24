@@ -1,0 +1,28 @@
+{
+  "name": "verify-vara",
+  "version": "1.0.0",
+  "description": "Starter template and docs for Vara Network development with vara-mcp-server (scaffold, compile, test, IDL)",
+  "scripts": {
+    "postinstall": "node -e \"console.log('\\n  verify-vara: Get started with Vara + vara-mcp-server. See README.\\n')\""
+  },
+  "keywords": [
+    "vara",
+    "vara-network",
+    "gear",
+    "sails",
+    "mcp",
+    "vara-mcp-server",
+    "smart-contracts",
+    "blockchain"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vara-network/verify-vara.git"
+  },
+  "files": [
+    "README.md",
+    "my_dapp"
+  ]
+}

@@ -1,0 +1,28 @@
+constructor {
+  /// Program constructor
+  new : ();
+};
+
+service Counter {
+  /// Add a value to the counter
+  add : (value: u64) -> u64;
+  /// Subtract a value from the counter
+  sub : (value: u64) -> u64;
+  /// Increment by 1
+  increment : () -> u64;
+  /// Decrement by 1
+  decrement : () -> u64;
+  /// Reset the counter to zero
+  reset : () -> u64;
+  /// Get the current counter value
+  query value : () -> u64;
+
+  events {
+    /// Emitted when a value is added
+    Added: u64;
+    /// Emitted when a value is subtracted
+    Subtracted: u64;
+    /// Emitted when the counter is reset
+    Reset;
+  }
+};

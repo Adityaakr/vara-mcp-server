@@ -1,0 +1,7 @@
+my_dapp/target/
+my_dapp/.DS_Store
+my_dapp/.binpath
+my_dapp/my_dapp.idl
+*.log
+.cursor/
+node_modules/

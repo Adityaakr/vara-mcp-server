@@ -1,0 +1,8 @@
+[package]
+name = "xtask"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+my_dapp = { path = ".." }
+sails-rs = { version = "0.10", features = ["idl-gen"] }
