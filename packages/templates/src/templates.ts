@@ -14,6 +14,7 @@ export const TEMPLATES: Record<TemplateName, TemplateInfo> = {
     files: [
       'Cargo.toml',
       'build.rs',
+      'idl/{{PROJECT_NAME}}.idl',
       'src/lib.rs',
       'tests/counter_test.rs',
       'README.md',
@@ -109,14 +110,16 @@ export function scaffoldFromTemplate(
 
   for (const file of template.files) {
     let content = file.content;
-    
-    // Substitute all variables
+    let resolvedPath = file.path;
+
+    // Substitute all variables in content and path
     for (const [key, value] of Object.entries(variables)) {
       const placeholder = `{{${key}}}`;
       content = content.split(placeholder).join(value);
+      resolvedPath = resolvedPath.split(placeholder).join(value);
     }
-    
-    const targetPath = join(targetDir, file.path);
+
+    const targetPath = join(targetDir, resolvedPath);
     const targetDirPath = dirname(targetPath);
 
     // Ensure directory exists
@@ -126,7 +129,7 @@ export function scaffoldFromTemplate(
 
     // Write the file
     writeFileSync(targetPath, content, 'utf-8');
-    createdFiles.push(file.path);
+    createdFiles.push(resolvedPath);
   }
 
   // Generate next steps based on template

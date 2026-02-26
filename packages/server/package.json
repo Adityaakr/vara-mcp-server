@@ -1,6 +1,6 @@
 {
   "name": "vara-mcp-server",
-  "version": "0.4.0",
+  "version": "0.4.3",
   "description": "MCP server for Vara Network smart program development with Sails",
   "type": "module",
   "main": "./dist/index.js",
@@ -45,13 +45,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vara-network/vara-mcp.git",
-    "directory": "packages/server"
+    "url": "https://github.com/Adityaakr/vara-mcp-server.git"
   },
   "bugs": {
-    "url": "https://github.com/vara-network/vara-mcp/issues"
+    "url": "https://github.com/Adityaakr/vara-mcp-server/issues"
   },
-  "homepage": "https://github.com/vara-network/vara-mcp#readme",
+  "homepage": "https://github.com/Adityaakr/vara-mcp-server#readme",
   "keywords": [
     "vara",
     "vara-network",

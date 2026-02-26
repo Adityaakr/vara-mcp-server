@@ -49,8 +49,41 @@ lto = true
 `,
     },
     {
+      path: 'idl/{{PROJECT_NAME}}.idl',
+      content: `constructor {
+  /// Program constructor
+  new : ();
+};
+
+service Counter {
+  /// Add a value to the counter
+  add : (value: u64) -> u64;
+  /// Subtract a value from the counter
+  sub : (value: u64) -> u64;
+  /// Increment by 1
+  increment : () -> u64;
+  /// Decrement by 1
+  decrement : () -> u64;
+  /// Reset the counter to zero
+  reset : () -> u64;
+  /// Get the current counter value
+  query value : () -> u64;
+
+  events {
+    /// Emitted when a value is added
+    Added: u64;
+    /// Emitted when a value is subtracted
+    Subtracted: u64;
+    /// Emitted when the counter is reset
+    Reset;
+  }
+};
+`,
+    },
+    {
       path: 'build.rs',
-      content: `use std::fs;
+      content: `use std::env;
+use std::fs;
 use std::path::Path;
 
 fn main() {
@@ -59,98 +92,121 @@ fn main() {
 }
 
 fn copy_idl_to_release() {
-    let target_dir = std::env::var("CARGO_TARGET_DIR").unwrap_or_else(|_| "target".to_string());
+    let target_dir = env::var("CARGO_TARGET_DIR").unwrap_or_else(|_| "target".to_string());
+    let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
     let target_path = Path::new(&target_dir);
-    let pkg_name = std::env::var("CARGO_PKG_NAME").unwrap();
+    let pkg_name = env::var("CARGO_PKG_NAME").unwrap();
     let idl_name = format!("{}.idl", pkg_name);
     let release_dirs = [
         target_path.join("wasm32v1-none").join("release"),
         target_path.join("wasm32v1-none").join("wasm32-gear").join("release"),
     ];
+
     let copy_to_all = |src: &Path| {
         for dest_dir in &release_dirs {
             let _ = fs::create_dir_all(dest_dir);
             let dest = dest_dir.join(&idl_name);
-            let _ = fs::copy(src, &dest);
+            if src != dest {
+                let _ = fs::copy(src, &dest);
+            }
         }
     };
-    if let Ok(out) = std::env::var("OUT_DIR") {
-        let out_path = Path::new(&out);
-        if let Ok(entries) = fs::read_dir(out_path) {
-            for e in entries.flatten() {
-                let p = e.path();
-                if p.extension().map_or(false, |e| e == "idl") {
-                    copy_to_all(&p);
-                    return;
+
+    let mut found = false;
+
+    // 1. Use embedded IDL (matches Counter service, constructors, events)
+    let idl_dir = Path::new(&manifest_dir).join("idl");
+    let embedded_idl = idl_dir.join(&idl_name);
+    if embedded_idl.exists() {
+        let content = fs::read_to_string(&embedded_idl).unwrap_or_default();
+        if !content.is_empty() && !content.trim().is_empty() {
+            copy_to_all(&embedded_idl);
+            found = true;
+        }
+    }
+
+    if !found {
+        let root_idl = Path::new(&manifest_dir).join(&idl_name);
+        if root_idl.exists() {
+            let content = fs::read_to_string(&root_idl).unwrap_or_default();
+            if !content.is_empty() && content != "0x00" {
+                copy_to_all(&root_idl);
+                found = true;
+            }
+        }
+    }
+
+    if !found {
+        for dir in &release_dirs {
+            let idl_path = dir.join(&idl_name);
+            if idl_path.exists() {
+                let content = fs::read_to_string(&idl_path).unwrap_or_default();
+                if !content.is_empty() && content != "0x00" {
+                    copy_to_all(&idl_path);
+                    found = true;
+                    break;
                 }
             }
         }
     }
-    let build_dir = target_path.join("wasm32v1-none").join("release").join("build");
-    if build_dir.exists() {
-        if let Ok(entries) = fs::read_dir(&build_dir) {
-            for e in entries.flatten() {
-                let out_sub = e.path().join("out");
-                if out_sub.is_dir() {
-                    if let Ok(out_entries) = fs::read_dir(&out_sub) {
-                        for f in out_entries.flatten() {
-                            let fp = f.path();
-                            if fp.extension().map_or(false, |e| e == "idl") {
-                                copy_to_all(&fp);
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    let gear_build = target_path.join("wasm32v1-none").join("wasm32-gear").join("release").join("build");
-    if gear_build.exists() {
-        if let Ok(entries) = fs::read_dir(&gear_build) {
-            for e in entries.flatten() {
-                let out_sub = e.path().join("out");
-                if out_sub.is_dir() {
-                    if let Ok(out_entries) = fs::read_dir(&out_sub) {
-                        for f in out_entries.flatten() {
-                            let fp = f.path();
-                            if fp.extension().map_or(false, |e| e == "idl") {
-                                copy_to_all(&fp);
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    let wp_build = target_path.join("wasm32v1-none").join("wasm-projects").join("release");
-    if wp_build.exists() {
-        let build_dir = wp_build.join("build");
-        if build_dir.exists() {
-            if let Ok(entries) = fs::read_dir(&build_dir) {
+
+    if !found {
+        if let Ok(out) = env::var("OUT_DIR") {
+            let out_path = Path::new(&out);
+            if let Ok(entries) = fs::read_dir(out_path) {
                 for e in entries.flatten() {
-                    let out_sub = e.path().join("out");
-                    if out_sub.is_dir() {
-                        if let Ok(out_entries) = fs::read_dir(&out_sub) {
-                            for f in out_entries.flatten() {
-                                let fp = f.path();
-                                if fp.extension().map_or(false, |e| e == "idl") {
-                                    copy_to_all(&fp);
-                                    return;
+                    let p = e.path();
+                    if p.extension().map_or(false, |e| e == "idl") {
+                        copy_to_all(&p);
+                        found = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    if !found {
+        for (build_sub, out_sub) in [
+            (target_path.join("wasm32v1-none").join("release").join("build"), "out"),
+            (target_path.join("wasm32v1-none").join("wasm32-gear").join("release").join("build"), "out"),
+            (target_path.join("wasm32v1-none").join("wasm-projects").join("release").join("build"), "out"),
+        ] {
+            if build_sub.exists() {
+                if let Ok(entries) = fs::read_dir(&build_sub) {
+                    for e in entries.flatten() {
+                        let out_dir = e.path().join(out_sub);
+                        if out_dir.is_dir() {
+                            if let Ok(out_entries) = fs::read_dir(&out_dir) {
+                                for f in out_entries.flatten() {
+                                    let fp = f.path();
+                                    if fp.extension().map_or(false, |e| e == "idl") {
+                                        let content = fs::read_to_string(&fp).unwrap_or_default();
+                                        if !content.is_empty() && content != "0x00" {
+                                            copy_to_all(&fp);
+                                            found = true;
+                                            break;
+                                        }
+                                    }
                                 }
                             }
                         }
+                        if found { break; }
                     }
                 }
             }
+            if found { break; }
         }
     }
-    let minimal_idl = "0x00";
-    for dest_dir in &release_dirs {
-        let _ = fs::create_dir_all(dest_dir);
-        let dest = dest_dir.join(&idl_name);
-        let _ = fs::write(&dest, minimal_idl);
+
+    if !found {
+        for dest_dir in &release_dirs {
+            let dest = dest_dir.join(&idl_name);
+            if !dest.exists() {
+                let _ = fs::create_dir_all(dest_dir);
+                let _ = fs::write(&dest, "0x00");
+            }
+        }
     }
 }
 `,
